@@ -1,22 +1,20 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
-import os
-import sys
+from aluno.models import models
 
+from aluno.AlunoSerializers import AlunoSerializers
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
 
-def main():
-    """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'va2.settings')
-    try:
-        from django.core.management import execute_from_command_line
-    except ImportError as exc:
-        raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
-        ) from exc
-    execute_from_command_line(sys.argv)
+models = models(nome='Paul', sexo='Van Dyke', matricula="")
+models.save()
 
+models = models(nome='Regis', sexo='Santos', matricula="")
+models.save()
 
-if __name__ == '__main__':
-    main()
+serializer = AlunoSerializers(models)
+serializer.data
+
+content = JSONRenderer().render(serializer.data)
+content
+
